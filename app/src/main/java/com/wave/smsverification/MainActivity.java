@@ -8,7 +8,11 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
@@ -28,11 +32,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
   GoogleApiClient mGoogleApiClient;
   SmsBroadcastReceiver mSmsBroadcastReceiver;
   private int RESOLVE_HINT = 2;
+  EditText inputMobileNumber, inputOtp;
+  Button btnGetOtp, btnVerifyOtp;
+  ConstraintLayout layoutInput, layoutVerify;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    initViews();
+    // init broadcast receiver
+    mSmsBroadcastReceiver = new SmsBroadcastReceiver();
+
     //set google api client for hint request
     mGoogleApiClient = new GoogleApiClient.Builder(this)
         .addConnectionCallbacks(this)
@@ -44,6 +56,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
     getApplicationContext().registerReceiver(mSmsBroadcastReceiver, intentFilter);
+
+    // get mobile number from phone
+    getHintPhoneNumber();
+    btnGetOtp.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        startSMSListener();
+      }
+    });
+  }
+
+  private void initViews() {
+    inputMobileNumber = findViewById(R.id.editTextInputMobile);
+    inputOtp = findViewById(R.id.editTextOTP);
+    btnGetOtp = findViewById(R.id.buttonGetOTP);
+    btnVerifyOtp = findViewById(R.id.buttonVerify);
+    layoutInput = findViewById(R.id.getOTPLayout);
+    layoutVerify = findViewById(R.id.verifyOTPLayout);
   }
 
   @Override public void onConnected(@Nullable Bundle bundle) {
@@ -71,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     Task<Void> mTask = mClient.startSmsRetriever();
     mTask.addOnSuccessListener(new OnSuccessListener<Void>() {
       @Override public void onSuccess(Void aVoid) {
+        layoutInput.setVisibility(View.GONE);
+        layoutVerify.setVisibility(View.VISIBLE);
         Toast.makeText(MainActivity.this, "SMS Retriever starts", Toast.LENGTH_LONG).show();
       }
     });
@@ -103,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
         // credential.getId();  <-- will need to process phone number string
+        inputMobileNumber.setText(credential.getId());
       }
     }
   }
