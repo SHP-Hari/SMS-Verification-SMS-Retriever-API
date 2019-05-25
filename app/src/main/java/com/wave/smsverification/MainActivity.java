@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     getHintPhoneNumber();
     btnGetOtp.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+        // Call server API for requesting OTP and when you got success start SMS Listener for listing auto read message lsitner
         startSMSListener();
       }
     });
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
   @Override public void onOtpReceived(String otp) {
     Toast.makeText(this, "Otp Received " + otp, Toast.LENGTH_LONG).show();
+    inputOtp.setText(otp);
   }
 
   @Override public void onOtpTimeout() {
