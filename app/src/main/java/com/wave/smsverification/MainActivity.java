@@ -6,14 +6,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.Credential;
 import com.google.android.gms.auth.api.credentials.HintRequest;
@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     getHintPhoneNumber();
     btnGetOtp.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        // Call server API for requesting OTP and when you got success start SMS Listener for listing auto read message lsitner
+        // Call server API for requesting OTP and when you got success start
+        // SMS Listener for listing auto read message lsitner
         startSMSListener();
       }
     });
@@ -133,10 +134,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     //Result if we want hint number
     if (requestCode == RESOLVE_HINT) {
       if (resultCode == Activity.RESULT_OK) {
+        if (data != null) {
+          Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+          // credential.getId();  <-- will need to process phone number string
+          inputMobileNumber.setText(credential.getId());
+        }
 
-        Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-        // credential.getId();  <-- will need to process phone number string
-        inputMobileNumber.setText(credential.getId());
       }
     }
   }
