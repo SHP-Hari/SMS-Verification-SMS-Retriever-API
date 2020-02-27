@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity"
     >
-  <android.support.constraint.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/getOTPLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -79,8 +79,8 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         />
 
-  </android.support.constraint.ConstraintLayout>
-  <android.support.constraint.ConstraintLayout
+  </androidx.constraintlayout.widget.ConstraintLayout>
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/verifyOTPLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -150,5 +150,5 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         />
 
-  </android.support.constraint.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
